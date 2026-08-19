@@ -156,7 +156,10 @@ const localStorage = multer.diskStorage({
     cb(null, filename);
   }
 });
-const storage = useSupabase ? multer.memoryStorage() : localStorage;
+
+// في بيئة Vercel أو عند تفعيل Supabase، يجب استخدام الذاكرة لمنع خطأ EROFS
+const isVercel = process.env.VERCEL === '1';
+const storage = (useSupabase || isVercel) ? multer.memoryStorage() : localStorage;
 
 const upload = multer({ 
   storage: storage,
