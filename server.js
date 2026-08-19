@@ -31,12 +31,14 @@ if (useSupabase) {
 
 async function recordAttempt(serialNumber, idNumber, status) {
   if (useSupabase) return supabaseDb.insertVerificationAttempt(serialNumber, idNumber, status);
+  if (!db) return;
   return db.prepare('INSERT INTO verification_attempts (serial_number, id_number, status) VALUES (?, ?, ?)')
     .run(serialNumber, idNumber, status);
 }
 
 async function findDocument(serialNumber, idNumber) {
   if (useSupabase) return supabaseDb.findDocument(serialNumber, idNumber);
+  if (!db) return null;
   return db.prepare('SELECT * FROM documents WHERE serial_number = ? AND id_number = ? AND status = ?')
     .get(serialNumber, idNumber, 'active');
 }
@@ -44,6 +46,18 @@ async function findDocument(serialNumber, idNumber) {
 app.disable('x-powered-by');
 app.use(express.json({ limit: '16kb' }));
 app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
+
+// نقطة تشخيص مؤقتة - للتحقق من المتغيرات البيئية
+app.get('/api/debug', (_req, res) => {
+  res.json({
+    useSupabase,
+    hasSupabaseUrl: !!process.env.SUPABASE_URL,
+    hasSupabaseKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+    urlStart: process.env.SUPABASE_URL ? process.env.SUPABASE_URL.slice(0, 30) + '...' : null,
+    isVercel: process.env.VERCEL === '1',
+    nodeEnv: process.env.NODE_ENV
+  });
+});
 
 const captchaStore = new Map();
 function purgeExpiredCaptchas() {
@@ -233,6 +247,11 @@ app.post('/api/upload', (request, response, next) => {
         status: 'active'
       });
     } else {
+      // إذا لم يكن Supabase مفعلاً ونحن على بيئة Vercel، توقف وأبلغ المستخدم
+      if (process.env.VERCEL === '1' || !db) {
+         throw new Error("لم يتعرف Vercel على إعدادات Supabase. يرجى إضافة SUPABASE_URL و SUPABASE_SERVICE_ROLE_KEY في إعدادات Vercel (Environment Variables).");
+      }
+      
       db.prepare('INSERT INTO documents (serial_number, id_number, document_type, file_path, file_size, mime_type, status) VALUES (?, ?, ?, ?, ?, ?, ?)')
         .run(serialNumber, idNumber, documentType, filePath, request.file.size, request.file.mimetype, 'active');
     }
