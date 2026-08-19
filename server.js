@@ -14,13 +14,19 @@ const databasePath = process.env.DATABASE_PATH || path.join(dataDirectory, 'veri
 let db;
 let supabaseDb;
 let Database;
+console.log('Environment useSupabase:', useSupabase);
 if (useSupabase) {
   supabaseDb = require('./supabase-adapter');
 } else {
-  Database = require('better-sqlite3');
-  fs.mkdirSync(path.dirname(databasePath), { recursive: true });
-  db = new Database(databasePath);
-  db.exec(fs.readFileSync(path.join(__dirname, 'db', 'schema.sql'), 'utf8'));
+  try {
+    const sqliteModule = 'better-sqlite3';
+    Database = require(sqliteModule);
+    fs.mkdirSync(path.dirname(databasePath), { recursive: true });
+    db = new Database(databasePath);
+    db.exec(fs.readFileSync(path.join(__dirname, 'db', 'schema.sql'), 'utf8'));
+  } catch (error) {
+    console.error('Failed to initialize SQLite on Vercel:', error.message);
+  }
 }
 
 async function recordAttempt(serialNumber, idNumber, status) {
