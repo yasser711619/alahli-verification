@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#5b5b5b" />
+  <title>التحقق من المستند</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="top-strip">
+      <div class="top-content">
+        <div class="contact" aria-label="معلومات التواصل">
+          <img class="contact-icon branch-icon" src="images/branches.svg" alt="" aria-hidden="true" /><span>البحث عن الفرع</span>
+          <img class="contact-icon phone-icon" src="images/tel.svg" alt="" aria-hidden="true" /><b>920024288</b>
+        </div>
+        <button class="language lang-link" type="button">ENGLISH</button>
+      </div>
+    </div>
+    <div class="nav-strip">
+      <div class="nav-content">
+        <a class="logo-plac
+        eholder" href="/" aria-label="الصفحة الرئيسية"><img src="images/logo-desktop1.svg" alt="البنك الأهلي السعودي" /></a>
+        <nav aria-label="التنقل الرئيسي">
+          <a href="#about">من نحن</a><a href="#invest">خدمات الإستثمار</a>
+          <a href="#companies">الخدمات المصرفية للشركات</a><a href="#personal">خدمات الأفراد</a>
+          <a href="upload.html">رفع مستند</a>
+          <a href="documents.html">عرض المستندات</a>
+        </nav>
+        <button class="menu" type="button" aria-label="فتح القائمة"><i></i><i></i><i></i></button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="verification-card" aria-labelledby="card-title">
+      <h1 id="card-title">التحقق من المستند</h1>
+      <form id="verification-form" novalidate>
+        <div class="form-grid">
+          <label>الرقم التسلسلي<em>*</em><input id="serial-number" name="serialNumber" autocomplete="off" required /></label>
+          <label>رقم الهوية<em>*</em><input id="id-number" name="idNumber" inputmode="numeric" autocomplete="off" required /></label>
+        </div>
+        <div class="captcha-section">
+          <div class="captcha-wrap"><canvas id="captcha" width="288" height="40" aria-label="رمز التحقق"></canvas><button id="refresh-captcha" type="button" aria-label="تحديث رمز التحقق">↻</button></div>
+          <label class="captcha-label">رمز التحقق<em>*</em><input id="captcha-input" name="captcha" autocomplete="off" required /></label>
+        </div>
+        <p id="message" class="message" role="status" aria-live="polite"></p>
+      </form>
+      <section id="document-result" class="document-result" aria-live="polite" hidden>
+        <div class="document-result-header">
+          <h2>المستند الذي تم التحقق منه</h2>
+          <a id="document-link" class="document-link" target="_blank" rel="noopener">فتح المستند</a>
+        </div>
+        <img id="document-image" class="document-preview" alt="المستند الذي تم التحقق منه" hidden />
+        <iframe id="document-pdf" class="document-preview" title="المستند الذي تم التحقق منه" hidden></iframe>
+      </section>
+    </section>
+    <div class="actions" dir="rtl"><button id="continue" class="continue" type="submit" form="verification-form">استمرار</button><button id="cancel" class="cancel" type="button">إلغاء</button></div>
+  </main>
+  <footer class="site-footer" dir="rtl">
+    <div class="footer-content">
+      <div class="footer-right">
+        <nav class="footer-links" aria-label="روابط التذييل">
+          <a href="#security">الأمن</a>
+          <a href="#jobs">الوظائف</a>
+          <a href="#privacy">حماية العميل</a>
+          <a href="#fees">الرسوم البنكية</a>
+          <a href="#capital">الأهلي كابيتل</a>
+          <a href="#care">عناية الأهلي</a>
+        </nav>
+        <span class="footer-copyright">بنك الأهلي السعودي، جميع الحقوق محفوظة ©</span>
+      </div>
+      <div class="footer-left">
+        <button class="footer-ecorp" type="button">الأهلي إي كورب</button>
+        <div class="social-links" aria-label="حسابات التواصل الاجتماعي">
+          <a class="social-link facebook" href="#facebook" aria-label="Facebook"><img src="images/feacbook.svg" alt="" /></a>
+          <a class="social-link instagram" href="#instagram" aria-label="Instagram"><img src="images/telgrm.svg" alt="" /></a>
+          <a class="social-link linkedin" href="#linkedin" aria-label="LinkedIn"><img src="images/in.svg" alt="" /></a>
+          <a class="social-link youtube" href="#youtube" aria-label="YouTube"><img src="images/youtube.svg" alt="" /></a>
+          <a class="social-link twitter" href="#twitter" aria-label="Twitter"><img src="images/x.svg" alt="" /></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>

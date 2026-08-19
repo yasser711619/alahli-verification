@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#5b5b5b" />
+  <title>رفع مستند</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .upload-section {
+      width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 5px 7px rgba(0,0,0,.23);
+      padding: 25px 31px 23px;
+    }
+
+    .upload-area {
+      border: 2px dashed #8a8a8a;
+      border-radius: 3px;
+      padding: 30px;
+      text-align: center;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .upload-area.drag-over {
+      border-color: #2f5fae;
+      background: rgba(47, 95, 174, 0.05);
+    }
+
+    .upload-button {
+      background: #097968;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 15px;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .file-preview {
+      margin-top: 20px;
+      display: none;
+    }
+
+    .file-info {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 3px;
+      text-align: right;
+    }
+
+    .progress-bar {
+      height: 5px;
+      background: #e0e0e0;
+      border-radius: 3px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      background: #097968;
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    @media (max-width: 700px) {
+      .upload-section {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="top-strip">
+      <div class="top-content">
+        <div class="contact" aria-label="معلومات التواصل">
+          <img class="contact-icon branch-icon" src="images/branches.svg" alt="" aria-hidden="true" /><span>البحث عن الفرع</span>
+          <img class="contact-icon phone-icon" src="images/tel.svg" alt="" aria-hidden="true" /><b>920024288</b>
+        </div>
+        <button class="language lang-link" type="button">ENGLISH</button>
+      </div>
+    </div>
+    <div class="nav-strip">
+      <div class="nav-content">
+        <a class="logo-placeholder" href="/" aria-label="الصفحة الرئيسية"><img src="images/logo-desktop1.svg" alt="البنك الأهلي السعودي" /></a>
+        <nav aria-label="التنقل الرئيسي">
+          <a href="#about">من نحن</a><a href="#invest">خدمات الإستثمار</a>
+          <a href="#companies">الخدمات المصرفية للشركات</a><a href="#personal">خدمات الأفراد</a>
+        </nav>
+        <button class="menu" type="button" aria-label="فتح القائمة"><i></i><i></i><i></i></button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="upload-section">
+      <h1>رفع مستند</h1>
+      <form id="upload-form" novalidate>
+        <div class="form-grid">
+          <label>الرقم التسلسلي<em>*</em><input id="serial-number" name="serialNumber" autocomplete="off" required /></label>
+          <label>رقم الهوية<em>*</em><input id="id-number" name="idNumber" inputmode="numeric" autocomplete="off" required /></label>
+        </div>
+
+        <div class="form-group">
+          <label>نوع المستند<em>*</em>
+            <select id="document-type" name="documentType" required>
+              <option value="">اختر نوع المستند</option>
+              <option value="جواسه">جواسه</option>
+              <option value="بطاقة هوية">بطاقة هوية</option>
+              <option value="جواز سفر">جواز سفر</option>
+              <option value="رخصة قيادة">رخصة قيادة</option>
+              <option value="كشف حساب">كشف حساب</option>
+              <option value="عقود">عقود</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="upload-area" id="upload-area">
+          <p>اسحب الملف هنا أو انقر لاختيار ملف</p>
+          <button type="button" class="upload-button" id="select-file">اختيار ملف</button>
+          <input type="file" id="file-input" class="file-input" accept=".pdf,.jpg,.jpeg,.png">
+          <div class="file-preview" id="file-preview">
+            <div class="file-info" id="file-info"></div>
+            <div class="progress-bar">
+              <div class="progress" id="progress"></div>
+            </div>
+          </div>
+        </div>
+
+        <p id="message" class="message" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+    <div class="actions" dir="ltr">
+      <button id="upload" class="continue" type="submit" form="upload-form">رفع المستند</button>
+      <button id="cancel" class="cancel" type="button">إلغاء</button>
+    </div>
+  </main>
+
+  <footer class="site-footer" dir="rtl">
+    <div class="footer-content">
+      <div class="footer-right">
+        <nav class="footer-links" aria-label="روابط التذييل">
+          <a href="#security">الأمن</a>
+          <a href="#jobs">الوظائف</a>
+          <a href="#privacy">حماية العميل</a>
+          <a href="#fees">الرسوم البنكية</a>
+          <a href="#capital">الأهلي كابيتل</a>
+          <a href="#care">عناية الأهلي</a>
+        </nav>
+        <span class="footer-copyright">بنك الأهلي السعودي، جميع الحقوق محفوظة ©</span>
+      </div>
+      <div class="footer-left">
+        <button class="footer-ecorp" type="button">الأهلي إي كورب</button>
+        <div class="social-links" aria-label="حسابات التواصل الاجتماعي">
+          <a class="social-link facebook" href="#facebook" aria-label="Facebook"><img src="images/feacbook.svg" alt="" /></a>
+          <a class="social-link instagram" href="#instagram" aria-label="Instagram"><img src="images/telgrm.svg" alt="" /></a>
+          <a class="social-link linkedin" href="#linkedin" aria-label="LinkedIn"><img src="images/in.svg" alt="" /></a>
+          <a class="social-link youtube" href="#youtube" aria-label="YouTube"><img src="images/youtube.svg" alt="" /></a>
+          <a class="social-link twitter" href="#twitter" aria-label="Twitter"><img src="images/x.svg" alt="" /></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const uploadArea = document.getElementById('upload-area');
+      const fileInput = document.getElementById('file-input');
+      const selectFileButton = document.getElementById('select-file');
+      const filePreview = document.getElementById('file-preview');
+      const fileInfo = document.getElementById('file-info');
+      const progress = document.getElementById('progress');
+      const message = document.getElementById('message');
+      const uploadForm = document.getElementById('upload-form');
+      const cancelButton = document.getElementById('cancel');
+
+      let selectedFile = null;
+
+      // اختيار ملف عبر الزر
+      selectFileButton.addEventListener('click', () => {
+        fileInput.click();
+      });
+
+      // اختيار ملف عبر الإدخال
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          handleFile(file);
+        }
+      });
+
+      // التعامل مع السحب والإفلات
+      uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('drag-over');
+      });
+
+      uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('drag-over');
+      });
+
+      uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('drag-over');
+
+        const file = e.dataTransfer.files[0];
+        if (file) {
+          handleFile(file);
+        }
+      });
+
+      // التعامل مع الملف المختار
+      function handleFile(file) {
+        // التحقق من نوع الملف
+        const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+        if (!allowedTypes.includes(file.type)) {
+          showMessage('يرجى اختيار ملف PDF أو صورة (JPEG/PNG)', false);
+          return;
+        }
+
+        // التحقق من حجم الملف (حد أقصى 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          showMessage('حجم الملف يجب أن يكون أقل من 5MB', false);
+          return;
+        }
+
+        selectedFile = file;
+
+        // عرض معلومات الملف
+        fileInfo.innerHTML = `
+          <p><strong>اسم الملف:</strong> ${file.name}</p>
+          <p><strong>نوع الملف:</strong> ${file.type}</p>
+          <p><strong>حجم الملف:</strong> ${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+        `;
+
+        filePreview.style.display = 'block';
+      }
+
+      // إظهار رسالة
+      function showMessage(text, success = false) {
+        message.textContent = text;
+        message.className = `message visible${success ? ' success' : ''}`;
+      }
+
+      // إلغاء الاختيار
+      cancelButton.addEventListener('click', () => {
+        uploadForm.reset();
+        filePreview.style.display = 'none';
+        selectedFile = null;
+        showMessage('');
+      });
+
+      // رفع الملف
+      uploadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (!selectedFile) {
+          showMessage('يرجى اختيار ملف للرفع', false);
+          return;
+        }
+
+        const serialNumber = document.getElementById('serial-number').value;
+        const idNumber = document.getElementById('id-number').value;
+        const documentType = document.getElementById('document-type').value;
+
+        try {
+          // إنشاء FormData لرفع الملف
+          const formData = new FormData();
+          formData.append('file', selectedFile);
+          formData.append('serialNumber', serialNumber);
+          formData.append('idNumber', idNumber);
+          formData.append('documentType', documentType);
+
+          console.log('Sending upload request with data:', {
+            fileName: selectedFile.name,
+            fileSize: selectedFile.size,
+            fileType: selectedFile.type,
+            serialNumber,
+            idNumber,
+            documentType
+          });
+
+          // رفع الملف
+          const response = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+          });
+
+          const result = await response.json();
+          console.log('Upload response:', result);
+
+          if (response.ok) {
+            showMessage(`تم رفع المستند بنجاح! ${result.message}`, true);
+            uploadForm.reset();
+            filePreview.style.display = 'none';
+            selectedFile = null;
+          } else {
+            showMessage(result.message, false);
+          }
+        } catch (error) {
+          showMessage('حدث خطأ أثناء رفع الملف. يرجى المحاولة مرة أخرى.', false);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

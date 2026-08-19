@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#5b5b5b" />
+  <title>عرض المستندات</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .documents-container {
+      width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 5px 7px rgba(0,0,0,.23);
+      padding: 25px 31px 23px;
+    }
+
+    .documents-list {
+      margin-top: 20px;
+    }
+
+    .document-item {
+      border: 1px solid #e0e0e0;
+      border-radius: 3px;
+      padding: 15px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .document-info {
+      flex: 1;
+    }
+
+    .document-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 5px 15px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: #097968;
+      color: white;
+    }
+
+    .btn-danger {
+      background: #e83c2f;
+      color: white;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 12px;
+      margin-right: 10px;
+    }
+
+    .status-active {
+      background: #cae4a7;
+      color: #187764;
+    }
+
+    .status-expired {
+      background: #f5d5d5;
+      color: #bc3026;
+    }
+
+    .status-revoked {
+      background: #d5d5d5;
+      color: #595959;
+    }
+
+    .empty-message {
+      text-align: center;
+      padding: 30px;
+      color: #8a8a8a;
+    }
+
+    @media (max-width: 700px) {
+      .documents-container {
+        width: 100%;
+      }
+
+      .document-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .document-actions {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: flex-end;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="top-strip">
+      <div class="top-content">
+        <div class="contact" aria-label="معلومات التواصل">
+          <img class="contact-icon branch-icon" src="images/branches.svg" alt="" aria-hidden="true" /><span>البحث عن الفرع</span>
+          <img class="contact-icon phone-icon" src="images/tel.svg" alt="" aria-hidden="true" /><b>920024288</b>
+        </div>
+        <button class="language lang-link" type="button">ENGLISH</button>
+      </div>
+    </div>
+    <div class="nav-strip">
+      <div class="nav-content">
+        <a class="logo-placeholder" href="/" aria-label="الصفحة الرئيسية"><img src="images/logo-desktop1.svg" alt="البنك الأهلي السعودي" /></a>
+        <nav aria-label="التنقل الرئيسي">
+          <a href="#about">من نحن</a><a href="#invest">خدمات الإستثمار</a>
+          <a href="#companies">الخدمات المصرفية للشركات</a><a href="#personal">خدمات الأفراد</a>
+          <a href="upload.html">رفع مستند</a>
+          <a href="documents.html">عرض المستندات</a>
+        </nav>
+        <button class="menu" type="button" aria-label="فتح القائمة"><i></i><i></i><i></i></button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="documents-container">
+      <h1>المستندات المسجلة</h1>
+      <div id="documents-list" class="documents-list">
+        <div class="empty-message">جاري تحميل المستندات...</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" dir="rtl">
+    <div class="footer-content">
+      <div class="footer-right">
+        <nav class="footer-links" aria-label="روابط التذييل">
+          <a href="#security">الأمن</a>
+          <a href="#jobs">الوظائف</a>
+          <a href="#privacy">حماية العميل</a>
+          <a href="#fees">الرسوم البنكية</a>
+          <a href="#capital">الأهلي كابيتال</a>
+          <a href="#care">عناية الأهلي</a>
+        </nav>
+        <span class="footer-copyright">بنك الأهلي السعودي، جميع الحقوق محفوظة ©</span>
+      </div>
+      <div class="footer-left">
+        <button class="footer-ecorp" type="button">الأهلي إي كورب</button>
+        <div class="social-links" aria-label="حسابات التواصل الاجتماعي">
+          <a class="social-link facebook" href="#facebook" aria-label="Facebook"><img src="images/feacbook.svg" alt="" /></a>
+          <a class="social-link instagram" href="#instagram" aria-label="Instagram"><img src="images/telgrm.svg" alt="" /></a>
+          <a class="social-link linkedin" href="#linkedin" aria-label="LinkedIn"><img src="images/in.svg" alt="" /></a>
+          <a class="social-link youtube" href="#youtube" aria-label="YouTube"><img src="images/youtube.svg" alt="" /></a>
+          <a class="social-link twitter" href="#twitter" aria-label="Twitter"><img src="images/x.svg" alt="" /></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const documentsList = document.getElementById('documents-list');
+
+      // جلب المستندات من الخادم
+      fetch('/api/documents')
+        .then(response => response.json())
+        .then(documents => {
+          if (documents.length === 0) {
+            documentsList.innerHTML = '<div class="empty-message">لا توجد مستندات مسجلة حالياً</div>';
+            return;
+          }
+
+          documentsList.innerHTML = documents.map(doc => `
+            <div class="document-item">
+              <div class="document-info">
+                <h3>${doc.document_type}</h3>
+                <p><strong>الرقم التسلسلي:</strong> ${doc.serial_number}</p>
+                <p><strong>رقم الهوية:</strong> ${doc.id_number}</p>
+                <p><strong>تاريخ التسجيل:</strong> ${new Date(doc.created_at).toLocaleDateString('ar-SA')}</p>
+                <span class="status status-${doc.status}">${doc.status === 'active' ? 'نشط' : doc.status === 'expired' ? 'منتهي' : 'ملغى'}</span>
+              </div>
+              <div class="document-actions">
+                <a href="/api/document/${doc.id}" class="btn btn-primary" target="_blank">عرض المستند</a>
+                <button class="btn btn-danger" onclick="deleteDocument(${doc.id})">حذف</button>
+              </div>
+            </div>
+          `).join('');
+        })
+        .catch(error => {
+          console.error('Error fetching documents:', error);
+          documentsList.innerHTML = '<div class="empty-message">حدث خطأ أثناء تحميل المستندات</div>';
+        });
+
+      // حذف مستند
+      window.deleteDocument = function(id) {
+        if (confirm('هل أنت متأكد من حذف هذا المستند؟')) {
+          fetch(`/api/document/${id}`, {
+            method: 'DELETE'
+          })
+          .then(response => response.json())
+          .then(result => {
+            if (result.ok) {
+              alert('تم حذف المستند بنجاح');
+              location.reload();
+            } else {
+              alert(result.message || 'حدث خطأ أثناء حذف المستند');
+            }
+          })
+          .catch(error => {
+            console.error('Error deleting document:', error);
+            alert('حدث خطأ أثناء حذف المستند');
+          });
+        }
+      };
+    });
+  </script>
+</body>
+</html>
