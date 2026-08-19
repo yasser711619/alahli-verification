@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const Database = require('better-sqlite3');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -14,9 +13,11 @@ const databasePath = process.env.DATABASE_PATH || path.join(dataDirectory, 'veri
 
 let db;
 let supabaseDb;
+let Database;
 if (useSupabase) {
   supabaseDb = require('./supabase-adapter');
 } else {
+  Database = require('better-sqlite3');
   fs.mkdirSync(path.dirname(databasePath), { recursive: true });
   db = new Database(databasePath);
   db.exec(fs.readFileSync(path.join(__dirname, 'db', 'schema.sql'), 'utf8'));
