@@ -44,7 +44,7 @@ main { flex: 1; min-height: calc(100vh - 210px); padding-top: 128px; padding-bot
 h1 { height: 55px; margin: 0; padding: 18px 16px 0; color: #fff; background: #097968; font-size: 16px; font-weight: 700; text-align: right; }
 form { padding: 25px 31px 23px; } .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; direction: rtl; }
 label { display: block; color: #464646; font-size: 13px; text-align: right; } .form-grid label { font-size: 16px; } em { color: #e83c2f; font-style: normal; margin-right: 1px; }
-input { display: block; width: 100%; height: 42px; margin-top: 6px; border: 1px solid #8a8a8a; border-radius: 3px; background: #fff; outline: none; font: 15px Tahoma, Arial, sans-serif; padding: 6px 10px; direction: ltr; }
+input { display: block; width: 100%; height: 42px; margin-top: 6px; border: 1px solid #8a8a8a; border-radius: 3px; background: #fff; outline: none; font: 15px Tahoma, Arial, sans-serif; padding: 6px 10px; direction: ltr; text-align: right; }
 input:focus { border-color: #2f5fae; box-shadow: 0 0 0 2px rgba(47,95,174,.13); }
 .captcha-section { width: 354px; margin: 16px 0 0 auto; }.captcha-wrap { position: relative; height: 40px; width: 288px; margin: 0 0 0 auto; background: #030303; overflow: hidden; }
 #captcha { display: block; width: 288px; height: 40px; }.captcha-wrap button { position: absolute; z-index: 2; top: 0; left: 0; height: 40px; width: 42px; color: #fff; font: 36px Arial; line-height: 35px; background: #080808; }

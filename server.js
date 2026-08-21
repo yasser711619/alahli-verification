@@ -59,33 +59,38 @@ app.get('/api/debug', (_req, res) => {
   });
 });
 
-const captchaStore = new Map();
-function purgeExpiredCaptchas() {
-  const expiresBefore = Date.now() - 10 * 60 * 1000;
-  for (const [token, item] of captchaStore) if (item.createdAt < expiresBefore) captchaStore.delete(token);
-}
+const captchaSecret = process.env.SUPABASE_SERVICE_ROLE_KEY || 'local-fallback-secret';
 
 app.get('/api/captcha', (_request, response) => {
-  purgeExpiredCaptchas();
   const code = Array.from({ length: 4 }, () => crypto.randomInt(0, 10)).join('');
-  const token = crypto.randomUUID();
-  captchaStore.set(token, { code, createdAt: Date.now() });
+  const timestamp = Date.now();
+  // توليد توقيع رقمي للمصادقة على الرمز دون الحاجة لحفظه في الذاكرة
+  const signature = crypto.createHmac('sha256', captchaSecret).update(`${code}:${timestamp}`).digest('hex');
+  const token = `${signature}:${timestamp}`;
   response.json({ token, code });
 });
 
 app.post('/api/verify', async (request, response) => {
   const { serialNumber, idNumber, captcha, captchaToken } = request.body || {};
-  const captchaRecord = captchaStore.get(captchaToken);
+  
   const fieldsValid = typeof serialNumber === 'string' && serialNumber.trim() &&
     typeof idNumber === 'string' && idNumber.trim();
-  const captchaValid = captchaRecord && typeof captcha === 'string' &&
-    captcha.trim().toUpperCase() === captchaRecord.code;
+    
+  let captchaValid = false;
+  if (captchaToken && typeof captcha === 'string') {
+    const [signature, timestamp] = captchaToken.split(':');
+    // التحقق من أن الرمز لم يمر عليه أكثر من 10 دقائق
+    if (signature && timestamp && Date.now() - parseInt(timestamp) < 10 * 60 * 1000) {
+      const expectedSignature = crypto.createHmac('sha256', captchaSecret).update(`${captcha.trim().toUpperCase()}:${timestamp}`).digest('hex');
+      if (signature === expectedSignature) {
+        captchaValid = true;
+      }
+    }
+  }
   
   if (!fieldsValid || !captchaValid) {
     // تسجيل محاولة فاشلة
     await recordAttempt(serialNumber || 'unknown', idNumber || 'unknown', 'failed');
-    captchaStore.delete(captchaToken);
-    
     return response.status(400).json({ ok: false, message: 'يرجى التحقق من البيانات ورمز التحقق.' });
   }
   
@@ -95,14 +100,11 @@ app.post('/api/verify', async (request, response) => {
   if (!document) {
     // تسجيل محاولة فاشلة
     await recordAttempt(serialNumber, idNumber, 'failed');
-    captchaStore.delete(captchaToken);
-    
     return response.status(400).json({ ok: false, message: 'لم يتم العثور على مستند مطابق للبيانات المدخلة.' });
   }
   
   // تسجيل محاولة ناجحة
   await recordAttempt(serialNumber, idNumber, 'success');
-  captchaStore.delete(captchaToken);
   
   response.json({ 
     ok: true, 
