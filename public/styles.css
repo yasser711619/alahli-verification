@@ -49,7 +49,7 @@ input:focus { border-color: #2f5fae; box-shadow: 0 0 0 2px rgba(47,95,174,.13); 
 .captcha-section { width: 354px; margin: 16px 0 0 auto; }.captcha-wrap { position: relative; height: 40px; width: 288px; margin: 0 0 0 auto; background: #030303; overflow: hidden; }
 #captcha { display: block; width: 288px; height: 40px; }.captcha-wrap button { position: absolute; z-index: 2; top: 0; left: 0; height: 40px; width: 42px; color: #fff; font: 36px Arial; line-height: 35px; background: #080808; }
 .captcha-label { margin-top: 2px; font-size: 16px; }.message { height: 0; margin: 0; overflow: hidden; text-align: right; color: #bc3026; }.message.visible { height: 19px; margin-top: 8px; }.message.success { color: #187764; }
-.actions { display: flex; direction: ltr; gap: 16px; width: 800px; margin: 25px auto 0; }.actions button { width: 131px; height: 41px; border-radius: 23px; font-weight: 700; }.continue { background: #cae4a7; color: #fff; }.cancel { background: #dfdfdf; color: #111; }
+.actions { display: flex; direction: ltr; gap: 16px; width: 800px; margin: 25px auto 0; }.actions button { width: 131px; height: 41px; border-radius: 23px; font-weight: 700; transition: background-color 0.3s ease; }.continue { background: #c7dea8; color: #fff; }.continue.active { background: #8cc63f; }.cancel { background: #dfdfdf; color: #111; }
 .site-footer { min-height: 58px; padding: 0; background: #3d3d3d; border-top: 3px solid #4a4a4a; border-radius: 0 0 8px 8px; color: #fff; }
 .footer-content { width: min(1605px, calc(100% - 48px)); min-height: 48px; margin: auto; display: flex; align-items: center; justify-content: space-between; direction: rtl; }
 .footer-right { display: flex; align-items: center; gap: 25px; white-space: nowrap; }
@@ -69,6 +69,4 @@ input:focus { border-color: #2f5fae; box-shadow: 0 0 0 2px rgba(47,95,174,.13); 
 .document-result-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
 .document-result h2 { margin: 0; color: #187764; font-size: 16px; }
 .document-link { color: #097968; font-weight: 700; text-decoration: underline; white-space: nowrap; }
-.document-preview { display: block; width: 100%; max-height: 520px; border: 1px solid #d0d0d0; background: #fff; object-fit: contain; }
-iframe.document-preview { height: 520px; }
-@media (max-width: 700px) { .document-result { margin: 0 22px 23px; }.document-result-header { align-items: flex-start; flex-direction: column; gap: 8px; } iframe.document-preview { height: 400px; } }
+@media (max-width: 700px) { .document-result { margin: 0 22px 23px; }.document-result-header { align-items: flex-start; flex-direction: column; gap: 8px; } }

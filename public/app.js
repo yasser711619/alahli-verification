@@ -5,8 +5,9 @@ const refreshButton = document.querySelector('#refresh-captcha');
 const message = document.querySelector('#message');
 const documentResult = document.querySelector('#document-result');
 const documentLink = document.querySelector('#document-link');
-const documentImage = document.querySelector('#document-image');
-const documentPdf = document.querySelector('#document-pdf');
+const serialInput = document.querySelector('#serial-number');
+const idInput = document.querySelector('#id-number');
+const continueBtn = document.querySelector('#continue');
 let captchaToken = '';
 
 function drawCaptcha(code) {
@@ -59,24 +60,25 @@ async function refreshCaptcha() {
 function showMessage(text, success = false) { message.textContent = text; message.className = `message visible${success ? ' success' : ''}`; }
 function clearDocumentResult() {
   documentResult.hidden = true;
-  documentImage.hidden = true;
-  documentPdf.hidden = true;
-  documentImage.removeAttribute('src');
-  documentPdf.removeAttribute('src');
   documentLink.removeAttribute('href');
 }
 function showDocumentResult(result) {
   if (!result.fileUrl) return;
   documentResult.hidden = false;
   documentLink.href = result.fileUrl;
-  if (result.mimeType === 'application/pdf') {
-    documentPdf.src = result.fileUrl;
-    documentPdf.hidden = false;
+}
+
+// تحديث لون زر استمرار بناءً على تعبئة الحقول
+function checkInputs() {
+  if (serialInput.value.trim() !== '' && idInput.value.trim() !== '') {
+    continueBtn.classList.add('active');
   } else {
-    documentImage.src = result.fileUrl;
-    documentImage.hidden = false;
+    continueBtn.classList.remove('active');
   }
 }
+serialInput.addEventListener('input', checkInputs);
+idInput.addEventListener('input', checkInputs);
+
 refreshButton.addEventListener('click', refreshCaptcha);
 document.querySelector('#cancel').addEventListener('click', () => { form.reset(); clearDocumentResult(); showMessage(''); refreshCaptcha(); });
 form.addEventListener('submit', async (event) => {
